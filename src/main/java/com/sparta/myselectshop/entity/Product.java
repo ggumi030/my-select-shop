@@ -34,18 +34,23 @@ public class Product extends Timestamped {
     @Column(nullable = false)
     private int myprice;
 
-    public Product(ProductRequestDto requestDto) {
+    @ManyToOne(fetch = FetchType.LAZY) //회원 정보가 필요할 때만 가져오게 하기
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public Product(ProductRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.image = requestDto.getImage();
         this.link = requestDto.getLink();
         this.lprice = requestDto.getLprice();
+        this.user = user;
     }
 
     public void update(ProductMypriceRequestDto requestDto) {
         this.myprice = requestDto.getMyprice();
     }
 
-    public void updateByItemDto(Long id, ItemDto itemDto) {
+    public void updateByItemDto(ItemDto itemDto) {
         this.lprice = itemDto.getLprice();
     }
 }
